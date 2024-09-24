@@ -6,7 +6,6 @@ namespace OliverKroener\OkCookiebotCookieConsent\Controller;
 
 use OliverKroener\Helpers\Service\SiteRootService;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Psr\Http\Message\ResponseInterface;
@@ -14,6 +13,7 @@ use TYPO3\CMS\Backend\Attribute\AsController;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Context\Context;
 use Exception;
 
 #[AsController]
@@ -23,6 +23,7 @@ final class BackendController extends ActionController
         protected readonly ModuleTemplateFactory $moduleTemplateFactory,
         protected readonly SiteRootService $siteRootService,
         protected readonly ConnectionPool $connectionPool,
+        protected readonly Context $context
     ) 
     {
     }
@@ -96,8 +97,13 @@ final class BackendController extends ActionController
     {
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable('sys_template');
 
-        // Fetch the page ID from request attributes
-        $currentPageId = (int)$this->request->getQueryParams()['id'] ?? 0;
+        if ($frontendMode) {
+            // Retrieve the current page ID
+            $currentPageId = (int)$this->context->getPropertyFromAspect('page', 'id');
+        } else {
+            // Fetch the page ID from request attributes
+            $currentPageId = (int)$this->request->getQueryParams()['id'] ?? 0;
+        }
 
         $siteRootPid = $this->siteRootService->findNextSiteRoot($currentPageId);
 
@@ -133,7 +139,7 @@ final class BackendController extends ActionController
 
         // Fetch the first sys_template record with pid=0
         $record = $queryBuilder
-            ->select('pid')
+            ->select('uid')
             ->from('sys_template')
             ->where(
                 $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($siteRootPid, Connection::PARAM_INT))
@@ -143,10 +149,12 @@ final class BackendController extends ActionController
 
         if ($record) {
             // Update existing record
+            $uid = (int)$record['uid'] ?? 0;
+
             $queryBuilder
                 ->update('sys_template')
                 ->where(
-                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter((int)$record, Connection::PARAM_INT))
+                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid, Connection::PARAM_INT))
                 )
                 ->set('tx_ok_cookiebot_banner_script', $bannerScript)
                 ->set('tx_ok_cookiebot_declaration_script', $declarationScript)
