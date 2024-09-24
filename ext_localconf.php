@@ -15,7 +15,7 @@ $_EXTKEY = 'ok_cookiebot';
     [
         'access' => 'user,group',
         'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/module-icon.svg',
-        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_module.xlf',
+        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_mod.xlf',
     ]
 );
 

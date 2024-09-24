@@ -8,7 +8,7 @@ $_EXTKEY = 'ok_cookiebot';
     'OkCookiebot',
     'web', // Main module: 'web'
     'cookieBot', // Submodule key
-    null, // Position
+    '', // Position
     [
         'OliverKroener\\OkCookiebotCookieConsent\\Controller\\ConsentController' => 'index, error, save',
     ],
@@ -17,9 +17,4 @@ $_EXTKEY = 'ok_cookiebot';
         'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/module-icon.svg',
         'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xlf',
     ]
-);
-
-// Add TypoScript setup
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptSetup(
-    '@import "EXT:' . $_EXTKEY . '/Configuration/TypoScript/setup.typoscript"'
 );

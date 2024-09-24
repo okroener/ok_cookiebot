@@ -4,11 +4,10 @@ namespace OliverKroener\OkCookiebotCookieConsent\Controller;
 
 use OliverKroener\Helpers\Service\SiteRootService;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class ConsentController extends ActionController
 {
@@ -17,15 +16,9 @@ class ConsentController extends ActionController
      */
     private $siteRootService;
 
-    /**
-     * @var PageRenderer
-     */
-    private $pageRenderer;
-
-    public function __construct(SiteRootService $siteRootService, PageRenderer $pageRenderer)
+    public function __construct(SiteRootService $siteRootService)
     {
         $this->siteRootService = $siteRootService;
-        $this->pageRenderer = $pageRenderer;
     }
 
     /**
@@ -64,7 +57,7 @@ class ConsentController extends ActionController
 
         // Add a flash message
         $this->addFlashMessage(
-            'Script saved successfully.',
+            LocalizationUtility::translate('flash.message.success', 'ok_cookiebot'),
             '',
             AbstractMessage::OK
         );
