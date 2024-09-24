@@ -1,37 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.0" xmlns:t3="http://typo3.org/schemas/xliff">
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2"
+       xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en" datatype="plaintext" original="messages" date="2024-09-19T12:00:00Z" product-name="ok_cookiebot">
     <header />
     <body>
-      <trans-unit id="module.title">
+      <trans-unit id="module.title" xml:space="preserve">
         <source>Cookiebot Settings</source>
       </trans-unit>
-      <trans-unit id="module.description">
+      <trans-unit id="module.description" xml:space="preserve">
         <source>Manage the JavaScript for cookie consent.</source>
       </trans-unit>
-      <trans-unit id="form.label.javascript">
+      <trans-unit id="form.label.javascript" xml:space="preserve">
         <source>JavaScript Code</source>
       </trans-unit>
       <trans-unit id="form.button.save" xml:space="preserve">
         <source>Save</source>
       </trans-unit>
-      <trans-unit id="flash.message.success">
+      <trans-unit id="flash.message.success" xml:space="preserve">
         <source>Script saved successfully.</source>
       </trans-unit>
-      <trans-unit id="form.header.cookie_consent_script">
+      <trans-unit id="form.header.cookie_consent_script" xml:space="preserve">
         <source>Cookiebot Settings</source>
       </trans-unit>
-      <trans-unit id="form.placeholder.javascript_code">
+      <trans-unit id="form.placeholder.javascript_code" xml:space="preserve">
         <source>JavaScript Code</source>
       </trans-unit>
-      <trans-unit id="form.button.reset">
+      <trans-unit id="form.button.reset" xml:space="preserve">
         <source>Reset</source>
       </trans-unit>
-      <trans-unit id="form.header.error">
+      <trans-unit id="form.header.error" xml:space="preserve">
         <source>Error</source>
       </trans-unit>
-      <trans-unit id="form.text.error">
+      <trans-unit id="form.text.error" xml:space="preserve">
         <source>Please select a root site or a page that contains a site root and template!</source>
+      </trans-unit>
+      <trans-unit id="form.label.banner_script" xml:space="preserve">
+        <source>Banner script</source>
+      </trans-unit>
+      <trans-unit id="form.label.declaration_script" xml:space="preserve">
+        <source>Declaration script</source>
       </trans-unit>
     </body>
   </file>

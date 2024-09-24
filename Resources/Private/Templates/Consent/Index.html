@@ -7,7 +7,9 @@
         </h1>
         <f:form action="save" class="mt-3">
             <div class="form-group">
-                <label for="monaco-editor">Banner script</label>
+                <label for="monaco-editor">
+                    <f:translate key="form.label.banner_script" />
+                </label>
                 <!-- Container for Monaco Editor -->
                 <div id="monaco-editor"></div>
 
@@ -20,7 +22,10 @@
                     placeholder="{f:translate(key:'form.placeholder.javascript_code')}" 
                     class="form-control" 
                 />
-                <label for="monaco-editor1">Declaration script</label>
+                
+                <label for="monaco-editor1">
+                    <f:translate key="form.label.declaration_script" />
+                </label>
                 <!-- Container for Monaco Editor -->
                 <div id="monaco-editor1"></div>
 
@@ -35,7 +40,7 @@
                 />
             </div>
             <f:form.submit value="{f:translate(key:'form.button.save')}" class="btn btn-outline-primary mt-2" />
-            <f:form.button type="reset" class="btn btn-outline-warning mt-2" name="Index" value="{f:translate(key:'form.button.reset')}" formmethod="post">
+            <f:form.button type="reset" class="btn btn-outline-warning mt-2" value="{f:translate(key:'form.button.save')}" name="Index" formmethod="post">
                 <f:translate key="form.button.reset" />
             </f:form.button>
         </f:form>
