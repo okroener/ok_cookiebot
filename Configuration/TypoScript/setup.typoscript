@@ -8,7 +8,7 @@ lib.cookiebotHeadScript {
 
 
 # Define a CONTENT object to fetch the footer script from the current site's root sys_template
-lib.cookiebotBodyScript = CONTENT
+lib.cookiebotBodyScript = USER
 lib.cookiebotBodyScript {
     userFunc = OliverKroener\OkCookiebotCookieConsent\Controller\ConsentController->renderBannerScript
     type = body

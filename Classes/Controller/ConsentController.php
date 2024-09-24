@@ -69,15 +69,21 @@ class ConsentController extends ActionController
     /**
      * Retrieves the consent script from the first sys_template record
      *
+     * @param bool $frontendMode
      * @return ?array
      */
-    protected function getConsentScripts(): ?array
+    protected function getConsentScripts($frontendMode = false): ?array
     {
         /** @var \TYPO3\CMS\Core\Database\ConnectionPool $connectionPool */
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
         $queryBuilder = $connectionPool->getQueryBuilderForTable('sys_template');
 
-        $currentPageId = (int)GeneralUtility::_GP('id');
+        if ($frontendMode) {
+            $currentPageId = (int)$GLOBALS['TSFE']->id;
+        } else {
+            $currentPageId = (int)GeneralUtility::_GP('id');
+        }
+
         $siteRootPid = $this->siteRootService->findNextSiteRoot($currentPageId);
 
         // return null if no site root is found
@@ -154,7 +160,7 @@ class ConsentController extends ActionController
         }
 
         // Get scripts
-        $scripts = $this->getConsentScripts();
+        $scripts = $this->getConsentScripts(true);
 
         if ($type === 'head') {
             return $scripts['tx_ok_cookiebot_banner_script'] ?? '';
