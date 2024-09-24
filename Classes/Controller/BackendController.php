@@ -133,7 +133,7 @@ final class BackendController extends ActionController
 
         // Fetch the first sys_template record with pid=0
         $record = $queryBuilder
-            ->select('pid')
+            ->select('uid')
             ->from('sys_template')
             ->where(
                 $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($siteRootPid, Connection::PARAM_INT))
@@ -143,10 +143,12 @@ final class BackendController extends ActionController
 
         if ($record) {
             // Update existing record
+            $uid = (int)$record['uid'] ?? 0;
+
             $queryBuilder
                 ->update('sys_template')
                 ->where(
-                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter((int)$record, Connection::PARAM_INT))
+                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid, Connection::PARAM_INT))
                 )
                 ->set('tx_ok_cookiebot_banner_script', $bannerScript)
                 ->set('tx_ok_cookiebot_declaration_script', $declarationScript)
