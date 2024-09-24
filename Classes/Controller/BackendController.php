@@ -1,54 +1,74 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OliverKroener\OkCookiebotCookieConsent\Controller;
 
 use OliverKroener\Helpers\Service\SiteRootService;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Attribute\AsController;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use TYPO3\CMS\Core\Database\Connection;
+use Exception;
 
-class ConsentController extends ActionController
+#[AsController]
+final class BackendController extends ActionController
 {
-    /**
-     * @var SiteRootService
-     */
-    private $siteRootService;
-
-    public function __construct(SiteRootService $siteRootService)
+    public function __construct(
+        protected readonly ModuleTemplateFactory $moduleTemplateFactory,
+        protected readonly SiteRootService $siteRootService,
+        protected readonly ConnectionPool $connectionPool,
+    ) 
     {
-        $this->siteRootService = $siteRootService;
     }
 
     /**
      * Displays the form to edit the consent script
      */
-    public function indexAction()
+    public function indexAction(): ResponseInterface
     {
+        try {
+            // Accessing the request object inside the action
+            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
 
-        $scripts = $this->getConsentScripts();
 
-        if (!empty($scripts)) {
-            // Assign data to the view
-            $this->view->assign('tx_ok_cookiebot_banner_script', $scripts['tx_ok_cookiebot_banner_script']);
-            $this->view->assign('tx_ok_cookiebot_declaration_script', $scripts['tx_ok_cookiebot_declaration_script']);
-        } else {
-            return $this->redirect('error');
+            $scripts = $this->getConsentScripts();
+
+            if (!empty($scripts)) {
+                // Assign data to the view
+                $this->view->assign('tx_ok_cookiebot_banner_script', $scripts['tx_ok_cookiebot_banner_script']);
+                $this->view->assign('tx_ok_cookiebot_declaration_script', $scripts['tx_ok_cookiebot_declaration_script']);
+            } else {
+                return $this->redirect('error');
+            }
+
+            //$moduleTemplate->setContent($this->view->render());
+            return $this->htmlResponse($this->view->render());
+        } catch (Exception $e) {
+            return $this->htmlResponse();
         }
     }
 
     /**
      * Shows an error, when no site root exists
      */
-    public function errorAction()
+    public function errorAction(): ResponseInterface
     {
+        // Render the view and return the HTML response
+        $content = $this->view->render();
+
+        return $this->htmlResponse($content);
     }
 
     /**
      * Saves the consent script
      */
-    public function saveAction()
+    public function saveAction(): ResponseInterface
     {
         $bannerScript = $this->request->getArgument('tx_ok_cookiebot_banner_script') ?? '';
         $declarationScript = $this->request->getArgument('tx_ok_cookiebot_declaration_script') ?? '';
@@ -59,11 +79,11 @@ class ConsentController extends ActionController
         $this->addFlashMessage(
             LocalizationUtility::translate('flash.message.success', 'ok_cookiebot'),
             '',
-            AbstractMessage::OK
+            ContextualFeedbackSeverity::OK
         );
 
         // Redirect back to index
-        $this->redirect('index');
+        return $this->redirect('index');
     }
 
     /**
@@ -74,15 +94,10 @@ class ConsentController extends ActionController
      */
     protected function getConsentScripts($frontendMode = false): ?array
     {
-        /** @var \TYPO3\CMS\Core\Database\ConnectionPool $connectionPool */
-        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-        $queryBuilder = $connectionPool->getQueryBuilderForTable('sys_template');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('sys_template');
 
-        if ($frontendMode) {
-            $currentPageId = (int)$GLOBALS['TSFE']->id;
-        } else {
-            $currentPageId = (int)GeneralUtility::_GP('id');
-        }
+        // Fetch the page ID from request attributes
+        $currentPageId = (int)$this->request->getQueryParams()['id'] ?? 0;
 
         $siteRootPid = $this->siteRootService->findNextSiteRoot($currentPageId);
 
@@ -93,9 +108,9 @@ class ConsentController extends ActionController
             ->select('tx_ok_cookiebot_banner_script', 'tx_ok_cookiebot_declaration_script')
             ->from('sys_template')
             ->where(
-                $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($siteRootPid, \PDO::PARAM_INT))
+                $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($siteRootPid, Connection::PARAM_INT))
             )
-            ->execute()
+            ->executeQuery()  // Changed from execute() to executeQuery()
             ->fetchAssociative();
 
         return $scripts;
@@ -104,38 +119,38 @@ class ConsentController extends ActionController
     /**
      * Saves the consent script to the first sys_template record
      *
-     * @param string $script
+     * @param string $bannerScript
+     * @param string $declarationScript
      * @return void
      */
     protected function saveConsentScript(string $bannerScript, string $declarationScript): void
     {
-        /** @var \TYPO3\CMS\Core\Database\ConnectionPool $connectionPool */
-        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-        $queryBuilder = $connectionPool->getQueryBuilderForTable('sys_template');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('sys_template');
 
-        $currentPageId = (int)GeneralUtility::_GP('id');
+        // Fetch the page ID from request attributes
+        $currentPageId = (int)$this->request->getQueryParams()['id'] ?? 0;
         $siteRootPid = $this->siteRootService->findNextSiteRoot($currentPageId);
 
         // Fetch the first sys_template record with pid=0
         $record = $queryBuilder
-            ->select('uid')
+            ->select('pid')
             ->from('sys_template')
             ->where(
-                $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($siteRootPid, \PDO::PARAM_INT))
+                $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($siteRootPid, Connection::PARAM_INT))
             )
-            ->execute()
-            ->fetchFirstColumn();
+            ->executeQuery()  // Changed from execute() to executeQuery()
+            ->fetchAssociative();
 
-        if ($record[0]) {
+        if ($record) {
             // Update existing record
             $queryBuilder
                 ->update('sys_template')
                 ->where(
-                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter((int)$record[0], \PDO::PARAM_INT))
+                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter((int)$record, Connection::PARAM_INT))
                 )
                 ->set('tx_ok_cookiebot_banner_script', $bannerScript)
                 ->set('tx_ok_cookiebot_declaration_script', $declarationScript)
-                ->execute();
+                ->executeStatement();  // Changed from execute() to executeStatement()
         }
     }
 
