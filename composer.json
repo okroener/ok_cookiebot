@@ -11,7 +11,8 @@
         }
     ],
     "require": {
-        "typo3/cms-core": "^11.5"
+        "typo3/cms-core": "^11.5",
+        "oliverkroener/ok-typo3-helper": "^3"
     },
     "autoload": {
         "psr-4": {
