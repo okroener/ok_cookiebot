@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{f:uri.resource(path: 'Css/index-kroenerdigital.css', extensionName: 'OkCookiebot')}" />
+
+    <!-- Include Bootstrap JS (and its dependencies like Popper.js) from CDN -->
+    <script defer src="{f:uri.resource(path: 'JavaScript/index-kroenerdigital.js', extensionName: 'OkCookiebot')}"></script>
+</head>
+
+<body data-bs-theme="dark" class="overflow-auto">
+    <!-- Render the content for the backend module -->
+    <div class="d-flex mx-3 row">
+        <f:flashMessages />
+        <f:render section="content" />
+    </div>
+</body>
+</html>

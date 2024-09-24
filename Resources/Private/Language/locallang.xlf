@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.0" xmlns:t3="http://typo3.org/schemas/xliff">
+  <file source-language="en" datatype="plaintext" original="messages" date="2024-09-19T12:00:00Z" product-name="ok_cookiebot">
+    <header />
+    <body>
+      <trans-unit id="module.title">
+        <source>Cookiebot Settings</source>
+      </trans-unit>
+      <trans-unit id="module.description">
+        <source>Manage the JavaScript for cookie consent.</source>
+      </trans-unit>
+      <trans-unit id="form.label.javascript">
+        <source>JavaScript Code</source>
+      </trans-unit>
+      <trans-unit id="form.button.save" xml:space="preserve">
+        <source>Save</source>
+      </trans-unit>
+      <trans-unit id="flash.message.success">
+        <source>Script saved successfully.</source>
+      </trans-unit>
+      <trans-unit id="form.header.cookie_consent_script">
+        <source>Cookiebot Settings</source>
+      </trans-unit>
+      <trans-unit id="form.placeholder.javascript_code">
+        <source>JavaScript Code</source>
+      </trans-unit>
+      <trans-unit id="form.button.reset">
+        <source>Reset</source>
+      </trans-unit>
+      <trans-unit id="form.header.error">
+        <source>Error</source>
+      </trans-unit>
+      <trans-unit id="form.text.error">
+        <source>Please select a root site or a page that contains a site root and template!</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
