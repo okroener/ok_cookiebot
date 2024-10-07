@@ -1,16 +1,16 @@
 # Define a USER object to fetch and render the banner script using a custom PHP function
 lib.cookiebotHeadScript = USER
 lib.cookiebotHeadScript {
-    userFunc = OliverKroener\OkCookiebotCookieConsent\Controller\ConsentController->renderBannerScript
+    userFunc = OliverKroener\OkCookiebotCookieConsent\Service\DatabaseService->renderBannerScript
     type = head
     stdWrap.trim = 1
 }
 
 
-# Define a CONTENT object to fetch the footer script from the current site's root sys_template
+# Define a USER object to fetch the footer script from the current site's root sys_template
 lib.cookiebotBodyScript = USER
 lib.cookiebotBodyScript {
-    userFunc = OliverKroener\OkCookiebotCookieConsent\Controller\ConsentController->renderBannerScript
+    userFunc = OliverKroener\OkCookiebotCookieConsent\Service\DatabaseService->renderBannerScript
     type = body
     stdWrap.trim = 1
 }

@@ -1,5 +1,6 @@
 <?php
-defined('TYPO3_MODE') || die();
+
+defined('TYPO3_MODE') || die('Access denied!');
 
 $_EXTKEY = 'ok_cookiebot';
 
