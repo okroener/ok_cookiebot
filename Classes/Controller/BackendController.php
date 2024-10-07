@@ -16,8 +16,7 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Context\Context;
 use Exception;
 
-#[AsController]
-final class BackendController extends ActionController
+class BackendController extends ActionController
 {
     public function __construct(
         protected readonly ModuleTemplateFactory $moduleTemplateFactory,
