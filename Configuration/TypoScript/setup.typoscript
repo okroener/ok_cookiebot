@@ -1,18 +1,17 @@
-# Define a USER object to fetch and render the banner script using a custom PHP function
-lib.cookiebotHeadScript = USER
+lib.cookiebotHeadScript = COA
 lib.cookiebotHeadScript {
-    userFunc = OliverKroener\OkCookiebotCookieConsent\Controller\ConsentController->renderBannerScript
-    type = head
-    stdWrap.trim = 1
+    10 = TEXT
+    10.userFunc = OliverKroener\OkCookiebotCookieConsent\Controller\ConsentController->renderBannerScript
+    10.type = head
+    10.stdWrap.trim = 1
 }
 
-
-# Define a CONTENT object to fetch the footer script from the current site's root sys_template
-lib.cookiebotBodyScript = USER
+lib.cookiebotBodyScript = COA
 lib.cookiebotBodyScript {
-    userFunc = OliverKroener\OkCookiebotCookieConsent\Controller\ConsentController->renderBannerScript
-    type = body
-    stdWrap.trim = 1
+    10 = TEXT
+    10.userFunc = OliverKroener\OkCookiebotCookieConsent\Controller\ConsentController->renderBannerScript
+    10.type = body
+    10.stdWrap.trim = 1
 }
 
 # Insert the head script into <head> if not empty
